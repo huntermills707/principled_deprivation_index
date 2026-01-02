@@ -1,4 +1,72 @@
-export geographies, geographic_components, states
+export geographies, geographic_components, states, surv_dec, surv_acs, vars_acs, vars_dec
+
+surv_dec = "2020/dec/dhc"
+vars_dec = [
+    # rurality
+    "Rural" => "H2_003N"
+    "Urban" => "H2_002N"
+    "Urban + Rural" => "H2_001N"
+]
+
+surv_acs = "2023/acs/acs5"
+vars_acs = [
+    "TotalPopulation" => "B01001_001E"
+    
+    # Single-Parent Households
+    "Male led Household with childeren" => "B11005_006E"
+    "Female led Household with childeren" => "B11005_007E"
+    # Nonfamilty household with child
+    "NonFamily Household with childeren" => "B11005_008E"
+    "Households with childeren" => "B11005_002E"
+
+    # youth not in school
+    "Male 16-19 no HS" => "B14005_012E"
+    "Female 16-19 no HS" => "B14005_026E"
+    "Female + Male 16-19" => "B14005_001E"
+
+    # Pay Gap Sex
+    "Male median earnings" => "B20001_002E"
+    "Female median earnings" => "B20001_023E"
+
+    # Pay Gap Race
+    "White median earnings" => "B20017A_001E"
+    "Black median earnings" => "B20017B_001E"
+
+    # Housing Gap
+    "Median House Price" => "B19013_001E"
+    "Median Salary" => "B25077_001E"
+
+    "Unemployment Rate" => "S2301_C04_001E"
+    "Owner Occupied Housing" => "DP04_0046PE"
+
+    #white collar jobs
+    "White collar workers" => "C24060_002E"
+    "Total workers" => "C24060_001E"
+
+    # SNAP
+    "Total Households" => "B22002_001E"
+    "Total Households w/ SNAP" => "B22002_002E"
+    "Total Households w/ SNAP + childeren" => "B22002_003E"
+    "Total Households w/ SNAP + elders" => "B22001_003E"
+
+    #tech
+    "Households w/o Internet" => "B28002_013E"
+    "Households w/ Broadband Internet" => "B28002_004E"
+    "Households w/ Smartphone" => "B28010_005E"
+
+    # char
+    "Households w/o Car" => "DP04_0058E"
+    "Households w/o Complete Plumbing" => "DP04_0073PE"
+    "Households w/o Complete Kitchen" => "DP04_0074E"
+    
+    # transport
+    "Over 60 min commuting" => "S0801_C01_045E"
+    "WFH" => "S0801_C01_013E"
+    "Public Transit to Work" => "S0801_C01_009E"
+    "Walked to Work" => "S0801_C01_010E"
+    "Biked to Work" => "S0801_C01_011E"
+    "Total Workers" => "S0801_C01_001E"
+];
 
 geographies = Dict([
     ("us" => "010")
