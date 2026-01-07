@@ -33,6 +33,45 @@ Many indexes utilize PCA (a great method), but PCA needs to be centered. So the 
 
 # The Model 
 
-We want an interpretable index. Data consistently oriented low deprivation to high deprivation make for a more interpretable index (NDI). The primary component should be Non-Negative and subsequent components should also be regularized. 
+We want an interpretable index. Data consistently oriented low deprivation to high deprivation make for a more interpretable index (NDI). The primary component should be Non-Negative and subsequent components should also be regularized.
 
-If subsequent components are constrained to be non-negative, then the primary component would act as a lower bound. Without the non-negative constraint, these components can describe deviations from the primary component, and reduce the effect of outliers. These components are also regularized.
+If subsequent components are constrained to be non-negative, then the primary component would act as a lower bound. Without the non-negative constraint, these components can describe deviations from the primary component. These components are also regularized.
+
+Data is also quantized.
+
+Here is the model:
+
+```math
+\begin{equation*}
+\begin{aligned}
+    \min_{X,Y} \quad & \sum_{(i,j) \in \Omega} f_h \left(  A_{i,j} - \left( XY \right)_{i,j} \right)+ \gamma_1 \left\Vert Y_{2:k,:} \right\Vert_1 + \gamma_2 \left\Vert Y_{2:k,:} \right\Vert_2 \\
+    s.t. \quad & X_{1,:} \geq 0 \\
+    & Y_{1,:} \geq 0 \\
+    & \max_{i} \sum_{j=1} \left|X_{i,j}\right| \leq 1 \\
+\end{aligned}
+\end{equation*}
+```
+
+Where
+
+```math
+\begin{equation*}
+    f_h(x) = \begin{cases} 
+      x^2 & |x| \leq c \\
+      2c\cdot |x| - c^2 & |x| > c
+   \end{cases}
+\end{equation*}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
