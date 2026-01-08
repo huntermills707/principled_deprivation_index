@@ -33,11 +33,13 @@ Many indexes utilize PCA (a great method), but PCA needs to be centered. So the 
 
 # The Model 
 
-We want an interpretable index. Data consistently oriented low deprivation to high deprivation make for a more interpretable index (NDI). The primary component should be Non-Negative and subsequent components should also be regularized.
+We want an interpretable index. Data consistently oriented low deprivation to high deprivation make for a more interpretable index (NDI). The primary component should be Non-Negative and subsequent components should also be regularized. The representation of the primary component should also be non-negative.
 
-If subsequent components are constrained to be non-negative, then the primary component would act as a lower bound. Without the non-negative constraint, these components can describe deviations from the primary component. These components are also regularized.
+If subsequent components are constrained to be non-negative, then the primary component would act as a lower bound. Without the non-negative constraint, these components can describe deviations from the primary component. These components are also regularized this pushes greater explain-ability to the primary component.
 
-Data is also quantized.
+Data is also quantized. Absolute row sums of representations are limited to be at most one.
+
+Huber function $(f_h)$ is used to further reduce effects of outliers.
 
 Here is the model:
 
@@ -62,16 +64,5 @@ Where
    \end{cases}
 \end{equation*}
 ```
-
-
-
-
-
-
-
-
-
-
-
 
 
