@@ -33,3 +33,4 @@ secrets.jl
 # raw data
 raw_data/
 derived_data/
+weights/
