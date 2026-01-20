@@ -9,9 +9,10 @@ df_state = CSV.read(
     "raw_data/states_fips.csv",
     DataFrame;
     delim = ", ",
-    ignoreemptylines = true,
-
+    ignoreemptyrows = true,
 )
+
+ffill(v) = v[accumulate(max, [i*!ismissing(v[i]) for i in 1:length(v)], init=1)]
 
 dfs = DataFrame[]   # empty vector to collect DataFrames
 
@@ -20,34 +21,35 @@ for row in eachrow(df_state)
     fips  = row[2]      # numeric FIPS
     abv   = row[3]      # abbreviation
 
-    # Build the path – replace spaces with '_' like the Python code
+    println(state)
+
     fname = joinpath(
-        "raw_data/fbi_cde/stateTables",
+        "raw_data/fbi_cde/stateTables_2023",
         replace(state, " " => "_") * "_Offense_Type_by_Agency_2023.xlsx"
     )
 
     # Load the sheet, skip the first 5 rows and the last 2 rows
-    # XLSX.readtable returns a DataFrame; we slice columns 1:7 (Julia is 1‑based)
-    raw = XLSX.readtable(fname, "Sheet1"; range = "A6:G$(XLSX.nrows(fname)-2)") |> DataFrame
-    df_crime = raw[:, 1:7]   # keep only first 7 columns
+    raw = XLSX.readtable(fname, 1; first_row=6, header=false) |> DataFrame
+    df_crime = raw[:, 1:7]
 
     rename!(df_crime, Dict(
-        1 => :AGENCY,
-        2 => :LOCATION,
-        3 => :POPULATION,
-        4 => Symbol("Total Offenses"),
-        5 => Symbol("Crimes Against Persons"),
-        6 => Symbol("Crimes Against Property"),
-        7 => Symbol("Crimes Against Society")
+        :A => :AGENCY,
+        :B => :LOCATION,
+        :C => :POPULATION,
+        :D => Symbol("Total Offenses"),
+        :E => Symbol("Crimes Against Persons"),
+        :F => Symbol("Crimes Against Property"),
+        :G => Symbol("Crimes Against Society")
     ))
 
-    # Forward‑fill AGENCY (equivalent to ffill)
-    df_crime.AGENCY = coalesce.(df_crime.AGENCY, forwardfill(df_crime.AGENCY))
+    m = .!ismissing.(df_crime[:, :LOCATION])
+    df_crime = df_crime[m, :]
+    df_crime.AGENCY = ffill(df_crime.AGENCY)
 
-    df_crime[!, :STATENAME] = state
-    df_crime[!, :STATE]     = fips
-    df_crime[!, :STATEABV]  = abv
-    df_crime[!, :LOCATION] = lowercase.(df_crime.LOCATION)
+    df_crime[!, :STATENAME] .= state
+    df_crime[!, :STATE]     .= fips
+    df_crime[!, :STATEABV]  .= abv
+    df_crime[!, :LOCATION]  .= lowercase.(df_crime.LOCATION)
 
     push!(dfs, df_crime)
 end
@@ -103,7 +105,7 @@ df_crime = leftjoin(df_crime, diffs_df, on = [:STATEABV, :LOCATION])
 replace!(df_crime.diff, missing=>0.0)
 
 df_pop = CSV.read("raw_data/census/census_data_county_raw.csv", DataFrame)[!, [:ucgid, :B01001_001E]]
-df_pop[!, :COUNTY] = parse.(Int, replace.(df_pop.ucgid, r"^US" => ""))
+df_pop[!, :COUNTY] = parse.(Int, replace.(df_pop.ucgid, r"US" => ""))
 
 # Join with city‑to‑county mapping to get STATEABV for each COUNTY
 df_pop = leftjoin(
@@ -123,7 +125,8 @@ df_crime = leftjoin(df_crime, df_pop, on = [:LOCATION, :STATEABV])
 df_crime[!, :POP_EST] = df_crime.COUNTYPOP .- df_crime.diff
 
 # Replace non‑positive estimates with missing
-df_crime.POP_EST .= ifelse.(df_crime.POP_EST .<= 0, missing, df_crime.POP_EST)
+m = ismissing.(df_crime.POP_EST) .| df_crime.POP_EST .<= 0
+df_crime[m, :POP_EST] .= missing
 
 # Fill original POPULATION where missing with POP_EST
 df_crime[!, :POPULATION] = coalesce.(df_crime.POPULATION, df_crime.POP_EST)
@@ -179,7 +182,7 @@ crime_data = vcat(
 dropmissing!(crime_data, [:TRACT, :ZIP, :COUNTY])
 
 # Keep first occurrence for duplicate tract/zip/county combos
-crime_data = unique(crime_data, [:TRACT, :ZIP, :COUNTY]; keepfirst = true)
+crime_data = unique(crime_data, [:TRACT, :ZIP, :COUNTY]; keep=:first)
 
 crime_data_zcta = unique(
     select(crime_data,
@@ -189,12 +192,12 @@ crime_data_zcta = unique(
          Symbol("Crimes Against Property Rate"),
          Symbol("Crimes Against Society Rate")]
     ),
-    :ZIP; keepfirst = true
+    :ZIP; keep=:first
 )
 
 grouped = groupby(crime_data, :TRACT)
 tract_rows = DataFrame(
-    TRACT = String[],
+    :TRACT => Int[],
     Symbol("Total Offenses Rate") => Float64[],
     Symbol("Crimes Against Persons Rate") => Float64[],
     Symbol("Crimes Against Property Rate") => Float64[],
@@ -225,10 +228,12 @@ county_cols = [
     Symbol("Crimes Against Society")
 ]
 
-crime_data_county = combine(
-    groupby(select(crime_data, county_cols), [:STATE, :COUNTY, :COUNTYNAME]),
-    names(county_cols, r"^") .=> sum .=> names(county_cols, r"$")
-)
+crime_data_county = combine(groupby(crime_data, [:STATE, :COUNTY, :COUNTYNAME])) do sub_df
+  (A = sum(sub_df[:, Symbol("Total Offenses")]),
+   B = sum(sub_df[:, Symbol("Crimes Against Persons")]),
+   C = sum(sub_df[:, Symbol("Crimes Against Property")]),
+   D = sum(sub_df[:, Symbol("Crimes Against Society")]))
+end
 
 # Merge with county population
 crime_data_county = leftjoin(
@@ -238,9 +243,9 @@ crime_data_county = leftjoin(
 )
 
 # Compute rates
-for col in [:Total_Offenses, :Crimes_Against_Persons,
-            :Crimes_Against_Property, :Crimes_Against_Society]
-    rate_name = Symbol(string(col), " Rate")
+for col in [Symbol("Total Offenses Sum"), Symbol("Crimes Against Persons Sum"),
+            Symbol("Crimes Against Property Sum"), Symbol("Crimes Against Society Sum")]
+  rate_name = Symbol(string(col)[1:end-4], " Rate")
     crime_data_county[!, rate_name] = crime_data_county[!, col] ./ crime_data_county.COUNTYPOP
 end
 
