@@ -105,7 +105,7 @@ df_crime = leftjoin(df_crime, diffs_df, on = [:STATEABV, :LOCATION])
 replace!(df_crime.diff, missing=>0.0)
 
 df_pop = CSV.read("raw_data/census/census_data_county_raw.csv", DataFrame)[!, [:ucgid, :B01001_001E]]
-df_pop[!, :COUNTY] = parse.(Int, replace.(df_pop.ucgid, r"US" => ""))
+df_pop[!, :COUNTY] = parse.(Int, replace.(df_pop.ucgid, r"500000US" => ""))
 
 # Join with city‑to‑county mapping to get STATEABV for each COUNTY
 df_pop = leftjoin(
@@ -220,32 +220,40 @@ end
 
 crime_data_tract = tract_rows
 
-county_cols = [
-    :STATE, :COUNTY, :COUNTYNAME,
-    Symbol("Total Offenses"),
-    Symbol("Crimes Against Persons"),
-    Symbol("Crimes Against Property"),
-    Symbol("Crimes Against Society")
-]
-
-crime_data_county = combine(groupby(crime_data, [:STATE, :COUNTY, :COUNTYNAME])) do sub_df
-  (A = sum(sub_df[:, Symbol("Total Offenses")]),
-   B = sum(sub_df[:, Symbol("Crimes Against Persons")]),
-   C = sum(sub_df[:, Symbol("Crimes Against Property")]),
-   D = sum(sub_df[:, Symbol("Crimes Against Society")]))
-end
-
-# Merge with county population
-crime_data_county = leftjoin(
-    crime_data_county,
-    select(df_pop, [:COUNTY, :COUNTYPOP]),
-    on = :COUNTY
+grouped = groupby(crime_data, [:STATE, :COUNTY, :COUNTYNAME])
+county_rows = DataFrame(
+    :STATE => Int[],
+    :COUNTY => Int[],
+    :COUNTYNAME => String[],
+    Symbol("Total Offenses") => Int[],
+    Symbol("Crimes Against Persons") => Int[],
+    Symbol("Crimes Against Property") => Int[],
+    Symbol("Crimes Against Society") => Int[]
 )
 
+for g in grouped
+    sub = dropmissing(g)
+    if size(sub)[1] > 0
+    push!(county_rows, (
+        first(sub.STATE),
+        first(sub.COUNTY),
+        first(sub.COUNTYNAME),
+        sum(sub[!, Symbol("Total Offenses")]),
+        sum(sub[!, Symbol("Crimes Against Persons")]),
+        sum(sub[!, Symbol("Crimes Against Property")]),
+        sum(sub[!, Symbol("Crimes Against Society")])
+    ))
+  end
+end
+
+crime_data_county = county_rows
+
+crime_data_county = innerjoin(crime_data_county, df_pop[:, [:COUNTY, :COUNTYPOP]], on=:COUNTY)
+
 # Compute rates
-for col in [Symbol("Total Offenses Sum"), Symbol("Crimes Against Persons Sum"),
-            Symbol("Crimes Against Property Sum"), Symbol("Crimes Against Society Sum")]
-  rate_name = Symbol(string(col)[1:end-4], " Rate")
+for col in [Symbol("Total Offenses"), Symbol("Crimes Against Persons"),
+            Symbol("Crimes Against Property"), Symbol("Crimes Against Society")]
+  rate_name = Symbol(string(col), " Rate")
     crime_data_county[!, rate_name] = crime_data_county[!, col] ./ crime_data_county.COUNTYPOP
 end
 
@@ -259,6 +267,10 @@ final_cnty_cols = [
 ]
 
 crime_data_county = dropmissing(select(crime_data_county, final_cnty_cols))
+
+println(crime_data_county)
+println(crime_data_zcta)
+println(crime_data_tract)
 
 CSV.write("derived_data/county/fbi_cde.csv", crime_data_county)
 CSV.write("derived_data/zcta/fbi_cde.csv", crime_data_zcta)
