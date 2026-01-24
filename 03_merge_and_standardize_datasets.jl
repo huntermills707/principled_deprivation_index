@@ -120,8 +120,9 @@ select!(dfs_county[2], Not(["STATE", "COUNTYNAME"]))
 select!(dfs_county[3], Not(["STATE", "COUNTYNAME"]))
 
 # combine data sets
-df_zcta = merge(dfs_zcta, "ZIP");
-df_tract = merge(dfs_tract, "TRACT");
+df_county = merge(dfs_county, :COUNTY)
+df_zcta = merge(dfs_zcta, :ZIP);
+df_tract = merge(dfs_tract, :TRACT);
 
 # parse income and float
 df_county[!,"median_income"] = convert.(Float64,df_county[!,"median_income"]);
@@ -143,7 +144,8 @@ df_county = df_county[:, ["COUNTY"; cols]];
 df_zcta = df_zcta[:, ["ZIP"; cols]];
 df_tract = df_tract[:, ["TRACT"; cols]];
 
-# export
+mkpath("datasets")
+
 CSV.write("datasets/county_dataset.csv", df_county);
 CSV.write("datasets/zcta_dataset.csv", df_zcta);
 CSV.write("datasets/tract_dataset.csv", df_tract);
