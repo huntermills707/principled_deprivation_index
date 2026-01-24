@@ -47,9 +47,9 @@ for row in eachrow(df_state)
     df_crime.AGENCY = ffill(df_crime.AGENCY)
 
     df_crime[!, :STATENAME] .= state
-    df_crime[!, :STATE]     .= fips
-    df_crime[!, :STATEABV]  .= abv
-    df_crime[!, :LOCATION]  .= lowercase.(df_crime.LOCATION)
+    df_crime[!, :STATE] .= fips
+    df_crime[!, :STATEABV] .= abv
+    df_crime[!, :LOCATION] = lowercase.(df_crime.LOCATION)
 
     push!(dfs, df_crime)
 end
@@ -74,7 +74,7 @@ for row in eachrow(filter(:AGENCY => in(["Metropolitan Counties","Nonmetropolita
     push!(crime_counties, (row.STATEABV, row.LOCATION))
 end
 
-city2county = unique(select(geog, [:CITYNAME, :COUNTYNAME, :STATEABV, :COUNTY]))
+city2county = unique(geog[:, [:CITYNAME, :COUNTYNAME, :STATEABV, :COUNTY]])
 
 diffs = Dict{Tuple{String,String}, Float64}()
 
@@ -101,14 +101,14 @@ for ((st, cnty), d) in diffs
 end
 
 # Merge diffs back onto the main crime table
-df_crime = leftjoin(df_crime, diffs_df, on = [:STATEABV, :LOCATION])
+leftjoin!(df_crime, diffs_df, on = [:STATEABV, :LOCATION])
 replace!(df_crime.diff, missing=>0.0)
 
 df_pop = CSV.read("raw_data/census/census_data_county_raw.csv", DataFrame)[!, [:ucgid, :B01001_001E]]
 df_pop[!, :COUNTY] = parse.(Int, replace.(df_pop.ucgid, r"500000US" => ""))
 
 # Join with city‑to‑county mapping to get STATEABV for each COUNTY
-df_pop = leftjoin(
+df_pop = innerjoin(
     select(city2county, [:COUNTY, :COUNTYNAME, :STATEABV]),
     df_pop,
     on = :COUNTY
@@ -119,13 +119,13 @@ rename!(df_pop, Dict(
     :COUNTYNAME   => :LOCATION
 ))
 df_pop[!, :LOCATION] = lowercase.(df_pop.LOCATION)
-unique!(df_pop)   # drop duplicates just in case
+unique!(df_pop)
 
 df_crime = leftjoin(df_crime, df_pop, on = [:LOCATION, :STATEABV])
 df_crime[!, :POP_EST] = df_crime.COUNTYPOP .- df_crime.diff
 
 # Replace non‑positive estimates with missing
-m = ismissing.(df_crime.POP_EST) .| df_crime.POP_EST .<= 0
+m = ismissing.(df_crime.POP_EST) .| (df_crime.POP_EST .<= 0)
 df_crime[m, :POP_EST] .= missing
 
 # Fill original POPULATION where missing with POP_EST
@@ -179,7 +179,7 @@ crime_data = vcat(
 )
 
 # Drop rows with any missing key fields
-dropmissing!(crime_data, [:TRACT, :ZIP, :COUNTY])
+dropmissing!(crime_data)
 
 # Keep first occurrence for duplicate tract/zip/county combos
 crime_data = unique(crime_data, [:TRACT, :ZIP, :COUNTY]; keep=:first)
@@ -220,6 +220,8 @@ end
 
 crime_data_tract = tract_rows
 
+unique!(crime_data, [:STATE, :COUNTY, :COUNTYNAME, rate_cols...])
+
 grouped = groupby(crime_data, [:STATE, :COUNTY, :COUNTYNAME])
 county_rows = DataFrame(
     :STATE => Int[],
@@ -250,10 +252,12 @@ crime_data_county = county_rows
 
 crime_data_county = innerjoin(crime_data_county, df_pop[:, [:COUNTY, :COUNTYPOP]], on=:COUNTY)
 
+unique!(crime_data_county)
+
 # Compute rates
 for col in [Symbol("Total Offenses"), Symbol("Crimes Against Persons"),
             Symbol("Crimes Against Property"), Symbol("Crimes Against Society")]
-  rate_name = Symbol(string(col), " Rate")
+    rate_name = Symbol(string(col), " Rate")
     crime_data_county[!, rate_name] = crime_data_county[!, col] ./ crime_data_county.COUNTYPOP
 end
 
@@ -267,10 +271,6 @@ final_cnty_cols = [
 ]
 
 crime_data_county = dropmissing(select(crime_data_county, final_cnty_cols))
-
-println(crime_data_county)
-println(crime_data_zcta)
-println(crime_data_tract)
 
 CSV.write("derived_data/county/fbi_cde.csv", crime_data_county)
 CSV.write("derived_data/zcta/fbi_cde.csv", crime_data_zcta)
