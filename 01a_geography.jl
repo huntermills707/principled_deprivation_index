@@ -66,10 +66,10 @@ geog[:, :COUNTYNAME] = lowercase.(geog[:, :COUNTYNAME]);
 geog[:, :STATENAME] = lowercase.(geog[:, :STATENAME]);
 
 # remove county modifiers
-geog[:, :COUNTYNAME] = replace(geog[:, :COUNTYNAME], (" county" => ""));
-geog[:, :COUNTYNAME] = replace(geog[:, :COUNTYNAME], (" municipio" => ""));
-geog[:, :COUNTYNAME] = replace(geog[:, :COUNTYNAME], (" city" => ""));
-geog[:, :COUNTYNAME] = replace(geog[:, :COUNTYNAME], (" census area" => ""));
+geog[:, :COUNTYNAME] = replace.(geog[:, :COUNTYNAME], (" county" => ""));
+geog[:, :COUNTYNAME] = replace.(geog[:, :COUNTYNAME], (" municipio" => ""));
+geog[:, :COUNTYNAME] = replace.(geog[:, :COUNTYNAME], (" city" => ""));
+geog[:, :COUNTYNAME] = replace.(geog[:, :COUNTYNAME], (" census area" => ""));
 
 # export
 println("saving results")
