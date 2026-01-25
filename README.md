@@ -26,11 +26,19 @@ Many indexes utilize PCA (a great method), but PCA needs to be centered. So the 
 
 # Data Sources
 
+The following open data sources were used to train and validate the principled deprivation index.
+
+### Training
+
 * US Census (https://data.census.gov/)
 * FBI Crime Data Explorer, NIBRS data by state and year (https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/downloads#nibrs-downloads)
 * FEMA Expected Annual Loss (https://www.fema.gov/about/openfema/data-sets/national-risk-index-data)
 * USDA Food Access Research Atlas (https://www.ers.usda.gov/data-products/food-access-research-atlas/download-the-data)
 * US Department of Housing and Urban Development (https://www.huduser.gov/portal/datasets/usps_crosswalk.html)
+
+### Testing
+
+* CDC Places (https://data.cdc.gov/browse?category=500+Cities+%26+Places&q=2024&sortBy=relevance&tags=places&pageSize=20)
 
 # The Model 
 
@@ -73,3 +81,4 @@ To the best of my understanding, the data shared here is allowed to be reposted 
 * FEMA Expected Annual Loss (https://www.fema.gov/about/openfema/terms-conditions)
 * USDA Food Access Research Atlas (https://www.usda.gov/about-usda/policies-and-links/open-government-usda)
 * US Department of Housing and Urban Development (https://data.hud.gov/open_data)
+* CDC Places (https://www.cdc.gov/places/faqs/index.html)
