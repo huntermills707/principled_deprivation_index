@@ -1,5 +1,5 @@
 using CSV
-using model_training.jl
+include("model_training.jl")
 
 # load data set
 fname = "datasets/tract_dataset.csv"
@@ -18,10 +18,10 @@ end
 A = Matrix(df[:, cols[2:end]])
 M = isnan.(A)
 
-X, Y = train(A, M; Y_prev_fp="weights/county_Y.csv")
+X, Y, k = train(A, M; Y_prev_fp="weights/county_Y.csv")
 
 # convert to DataFrames and save
-df_Y = DataFrame(Y_0, cols[2:end])
+df_Y = DataFrame(Y, cols[2:end])
 fname = "weights/tract_Y.csv"
 CSV.write(fname, df_Y)
 

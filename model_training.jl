@@ -47,7 +47,7 @@ function opt_Y(A, H, X_0, Y_0, k, m, residual, i)
 end
 
 
-function opt_X(A, H, X_0, Y_0, i, dim, k, residual, i)
+function opt_X(A, H, X_0, Y_0, j, dim, k, residual, i)
 
     X = Variable((dim, k))
     set_value!(X, X_0[j:j+dim-1, :])
@@ -76,7 +76,7 @@ function train(A, M; Y_prev_fp="")
 
     (n, m) = size(A);
 
-    k = get_nfa(A)
+    k = get_nfa(A, M)
 
     MAX_ITERS = 20 
     residual = zeros(MAX_ITERS);
@@ -126,5 +126,5 @@ function train(A, M; Y_prev_fp="")
     w = w ./ sum(w)
     println(w)
 
-    return X_0, Y_0
+    return X_0, Y_0, k
 end
