@@ -2,7 +2,7 @@
 ## WIP
 Using GLRM to calculate principled deprivation indexes using public data.
 
-There are several social indexes that currently exist
+There are several social indices that currently exist
 * ADI: Area Deprivation Index
 * NDI: Neighborhood Deprivation Index
 * SVI: Social Vulnerability Index
@@ -40,7 +40,7 @@ The following open data sources were used to train and validate the principled d
 
 * CDC Places (https://data.cdc.gov/browse?category=500+Cities+%26+Places&q=2024&sortBy=relevance&tags=places&pageSize=20)
 
-### Comparison Indecies
+### Comparison Indices
 
 * Area Deprivation Index (https://www.neighborhoodatlas.medicine.wisc.edu/)
 * Neighborhood Deprivation Index (https://gis.cancer.gov/research/files.html#soc-dep)
