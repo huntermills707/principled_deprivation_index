@@ -40,6 +40,12 @@ The following open data sources were used to train and validate the principled d
 
 * CDC Places (https://data.cdc.gov/browse?category=500+Cities+%26+Places&q=2024&sortBy=relevance&tags=places&pageSize=20)
 
+### Comparison Indecies
+
+* Area Deprivation Index (https://www.neighborhoodatlas.medicine.wisc.edu/)
+* Neighborhood Deprivation Index (https://gis.cancer.gov/research/files.html#soc-dep)
+* Social Vulnerability Index (https://www.atsdr.cdc.gov/place-health/php/svi/svi-data-documentation-download.html)
+
 # The Model 
 
 We want an interpretable index. Data consistently oriented low deprivation to high deprivation make for a more interpretable index (NDI). The primary component should be Non-Negative and subsequent components should also be regularized. The representation of the primary component should also be non-negative.
