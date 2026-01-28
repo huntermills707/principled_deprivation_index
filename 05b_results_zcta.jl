@@ -5,20 +5,18 @@ using StatsPlots
 
 include("analysis.jl")
 
-df_x = DataFrame(CSV.File("weights/county_X.csv"))[:, ["COUNTY", "1"]]
+df_x = DataFrame(CSV.File("weights/zcta_X.csv"))[:, ["ZIP", "1"]]
 rename!(df_x, [("1" => :x)]);
 
-df_ha = DataFrame(CSV.File("raw_data/ucsf_health_atlas/health-atlas-2026-01-27-county.csv"))
+df_ha = DataFrame(CSV.File("raw_data/ucsf_health_atlas/health-atlas-2026-01-27-zip.csv"))
 
-rename!(df_ha, [(:GEOID => :COUNTY)]);
+rename!(df_ha, [(:GEOID => :ZIP)]);
 
-df = leftjoin(df_ha, df_x, on=:COUNTY);
+df = leftjoin(df_ha, df_x, on=:ZIP);
 
 indices = [
     :x,
     :ndi,
-    :RPL_THEMES,
-    :risk_score,
 ]
 
 results = DataFrame([[name for (_, name) in conditions]], ["Condition"])
