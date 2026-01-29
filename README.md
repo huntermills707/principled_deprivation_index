@@ -38,13 +38,17 @@ The following open data sources were used to train and validate the principled d
 
 ### Testing
 
-* CDC Places (https://data.cdc.gov/browse?category=500+Cities+%26+Places&q=2024&sortBy=relevance&tags=places&pageSize=20)
+* CDC Places
+ * Pulled from UCSF Health Atlas (https://healthatlas.ucsf.edu/)
 
 ### Comparison Indices
 
-* Area Deprivation Index (https://www.neighborhoodatlas.medicine.wisc.edu/)
 * Neighborhood Deprivation Index (https://gis.cancer.gov/research/files.html#soc-dep)
 * Social Vulnerability Index (https://www.atsdr.cdc.gov/place-health/php/svi/svi-data-documentation-download.html)
+* Neighborhood Socioeconomic Status Index
+* National Risk Index Score
+
+All pulled from UCSF Health Atlas (https://healthatlas.ucsf.edu/)
 
 # The Model 
 
