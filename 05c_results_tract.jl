@@ -4,6 +4,7 @@ using Plots
 using StatsPlots
 
 include("analysis.jl")
+include("plots.jl")
 
 df_x = DataFrame(CSV.File("weights/tract_X.csv"))[:, ["TRACT", "1"]]
 rename!(df_x, [("1" => :x)]);
@@ -45,3 +46,7 @@ for i in 1:n
 end
 
 println(pvals)
+
+for (condition, name) in conditions
+    plot_tract(df, condition, name)
+end
