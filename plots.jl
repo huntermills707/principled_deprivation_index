@@ -1,4 +1,5 @@
 using DataFrames
+using KernelDensity
 using Plots
 using StatsPlots
 
