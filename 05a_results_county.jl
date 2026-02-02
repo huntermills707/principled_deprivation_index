@@ -15,11 +15,20 @@ rename!(df_ha, [(:GEOID => :COUNTY)]);
 
 df = leftjoin(df_ha, df_x, on=:COUNTY);
 
+new_names = [
+    :x => :PDI
+    :ndi => :NDI
+    :RPL_THEMES => :SVI
+    :risk_score => :NRI
+]
+
+rename!(df, new_names...)
+
 indices = [
-    :x,
-    :ndi,
-    :RPL_THEMES,
-    :risk_score,
+    :PDI,
+    :NDI,
+    :SVI,
+    :NRI,
 ]
 
 results = DataFrame([[name for (_, name) in conditions]], ["Condition"])

@@ -41,7 +41,7 @@ function kde_subplots(df, col1, col2, name)
 
     ky = KernelDensity.kde(y)
     p_y = density(y, orientation=:h, ylims=(ymin, ymax), xlims=(0, 1.1 * maximum(ky.density)), 
-                   legend=false,  ticks=nothing, xguide="", yguide="", ylabel=name)
+                  legend=false,  ticks=nothing, xguide="", yguide="", ylabel="$(name) (%)")
  
     p_x = density(x, xlims=(xmin, xmax), legend=false, ticks=nothing, xguide="", yguide="", xlabel=col1)
 
@@ -63,10 +63,10 @@ function plot_county(df, col, name)
     """
     mkpath("plots/county")
 
-    i1_xy, i1_x, y = kde_subplots(df, :x, col, name)
-    i2_xy, i2_x, _ = kde_subplots(df, :ndi, col, name)
-    i3_xy, i3_x, _ = kde_subplots(df, :RPL_THEMES, col, name)
-    i4_xy, i4_x, _ = kde_subplots(df, :risk_score, col, name)
+    i1_xy, i1_x, y = kde_subplots(df, :PDI, col, name)
+    i2_xy, i2_x, _ = kde_subplots(df, :NDI, col, name)
+    i3_xy, i3_x, _ = kde_subplots(df, :SVI, col, name)
+    i4_xy, i4_x, _ = kde_subplots(df, :NRI, col, name)
 
     l = @layout [
         i1_x              i2_x               _; 
@@ -91,8 +91,8 @@ function plot_zip(df, col, name)
     """
     mkpath("plots/zcta")
 
-    i1_xy, i1_x, y = kde_subplots(df, :x, col, name)
-    i2_xy, i2_x, _ = kde_subplots(df, :ndi, col, name)
+    i1_xy, i1_x, y = kde_subplots(df, :PDI, col, name)
+    i2_xy, i2_x, _ = kde_subplots(df, :NDI, col, name)
 
     l = @layout [
         i1_x              i2_x               _; 
@@ -118,11 +118,11 @@ function plot_tract(df, col, name)
     """
     mkpath("plots/tract")
 
-    i1_xy, i1_x, y = kde_subplots(df, :x, col, name)
-    i2_xy, i2_x, _ = kde_subplots(df, :ndi, col, name)
-    i3_xy, i3_x, _ = kde_subplots(df, :RPL_THEMES, col, name)
-    i4_xy, i4_x, _ = kde_subplots(df, :risk_score, col, name)
-    i5_xy, i5_x, _ = kde_subplots(df, :nses_index, col, name)
+    i1_xy, i1_x, y = kde_subplots(df, :PDI, col, name)
+    i2_xy, i2_x, _ = kde_subplots(df, :NDI, col, name)
+    i3_xy, i3_x, _ = kde_subplots(df, :SVI, col, name)
+    i4_xy, i4_x, _ = kde_subplots(df, :NRI, col, name)
+    i5_xy, i5_x, _ = kde_subplots(df, :nSES, col, name)
 
     l = @layout [
       [i1_x               i2_x               i3_x              _;

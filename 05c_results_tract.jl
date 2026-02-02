@@ -15,15 +15,25 @@ rename!(df_ha, [(:GEOID => :TRACT)]);
 
 df = leftjoin(df_ha, df_x, on=:TRACT);
 
-indices = [
-    :x,
-    :ndi,
-    :RPL_THEMES,
-    :risk_score,
-    :nses_index,
+new_names = [
+    :x => :PDI
+    :ndi => :NDI
+    :RPL_THEMES => :SVI
+    :risk_score => :NRI
+    :nses_index => :nSES
 ]
 
-df[:, :nses_index] .*= -1;
+rename!(df, new_names...)
+
+indices = [
+    :PDI,
+    :NDI,
+    :SVI,
+    :NRI,
+    :nSES,
+]
+
+df[:, :nSES] .*= -1;
 
 results = DataFrame([[name for (_, name) in conditions]], ["Condition"])
 

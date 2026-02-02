@@ -15,9 +15,16 @@ rename!(df_ha, [(:GEOID => :ZIP)]);
 
 df = leftjoin(df_ha, df_x, on=:ZIP);
 
+new_names = [
+    :x => :PDI
+    :ndi => :NDI
+]
+
+rename!(df, new_names...)
+
 indices = [
-    :x,
-    :ndi,
+    :PDI,
+    :NDI,
 ]
 
 results = DataFrame([[name for (_, name) in conditions]], ["Condition"])
