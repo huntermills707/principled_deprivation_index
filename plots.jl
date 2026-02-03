@@ -134,5 +134,5 @@ function plot_tract(df, col, name)
     p = plot(i1_x, i2_x, i3_x , i1_xy, i2_xy, i3_xy, y, i4_x, i5_x, i4_xy, i5_xy, y, 
              layout = l, 
              size=(800,600))
-    savefig(p, """plots/tract/$(col), ("\n" => "_")])).png""")
+    savefig(p, """plots/tract/$(col).png""")
 end
