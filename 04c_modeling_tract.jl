@@ -1,5 +1,5 @@
 using CSV
-include("model_training.jl")
+include("helpers/model_training.jl")
 
 # load data set
 fname = "datasets/tract_dataset.csv"

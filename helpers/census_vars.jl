@@ -11,7 +11,7 @@ vars_dec = [
 surv_acs = "2023/acs/acs5"
 vars_acs = [
     "TotalPopulation" => "B01001_001E"
-    
+
     # Single-Parent Households
     "Male led Household with childeren" => "B11005_006E"
     "Female led Household with childeren" => "B11005_007E"

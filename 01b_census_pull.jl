@@ -47,7 +47,7 @@ function query_census(surv, var; agg="county", state="")
     else
         url = "https://api.census.gov/data/$surv"
     end
-    
+ 
     ucgid = format_ucgid(agg=agg, state=state)
     query = Dict([
         ("key", ENV["census_key"]),
@@ -59,22 +59,22 @@ function query_census(surv, var; agg="county", state="")
     println(url)
     println(query)
     println()
-    
+ 
     r = HTTP.get(
         url;
         query = query
     )
-    
+ 
     body = JSON3.read(r.body)
     header, data = body[1], body[2:end]
-    
+ 
     df = OrderedDict{Symbol, Vector}()
     for (i, col_name) in enumerate(header)
         df[Symbol(col_name)] = [row[i] for row in data]
     end
 
     sleep(5)
-    
+ 
     return DataFrame(df);
 end
 

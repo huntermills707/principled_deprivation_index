@@ -1,10 +1,8 @@
 using CSV, DataFrames
-using Statistics, HypothesisTests, StatsAPI
-using Plots
-using StatsPlots
+using HypothesisTests, StatsAPI
 
-include("analysis.jl")
-include("plots.jl")
+include("helpers/analysis.jl")
+include("helpers/plots.jl")
 
 df_x = DataFrame(CSV.File("weights/tract_X.csv"))[:, ["TRACT", "1"]]
 rename!(df_x, [("1" => :x)]);
