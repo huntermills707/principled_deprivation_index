@@ -109,6 +109,8 @@ The generated Principled Deprivation Index (PDI) is compared against existing in
 
 ### County
 
+Here are the correlations between CDC Places population health estimates at the county level compared against county level indices:
+
 Condition | PDI | NDI | SVI | NRI |
 | :--- | :--- | :--- | :--- | :--- |
 | Poor mental health | 0.581173 | 0.676638 | 0.572708 | 0.053637 |
@@ -135,6 +137,8 @@ Condition | PDI | NDI | SVI | NRI |
 
 ### ZCTA
 
+Here are the correlations between CDC Places population health estimates the ZCTA level compared against ZCTA level indices:
+
 Condition | PDI | NDI |
 | :--- | :--- | :--- |
 | Poor mental health | 0.508889 | 0.650338 |
@@ -160,6 +164,8 @@ Condition | PDI | NDI |
 | Coronary heart disease | 0.398257 | 0.553607 |
 
 ### Tract
+
+Here are the correlations between CDC Places population health estimates at the tract level compared against tract level indices:
 
 Condition | PDI | NDI | SVI | NRI | nSES |
 | :--- | :--- | :--- | :--- | :--- | :--- |
