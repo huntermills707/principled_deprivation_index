@@ -30,12 +30,11 @@ JuliaLocalPreferences.toml
 # secrets
 secrets.jl
 
-# raw data
 raw_data/
-derived_data/
-datasets/
-weights/
-plots/
+# derived_data/
+# datasets/
+# weights/
+# plots/
 
 # IJulia caches
 .ipynb_checkpoints/
