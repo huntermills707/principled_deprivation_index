@@ -54,3 +54,13 @@ println(pvals)
 for (condition, name) in conditions
     plot_county(df, condition, name)
 end
+
+mkpath("final")
+
+CSV.write("final/county_results.csv", df);
+
+df_y = DataFrame(CSV.File("weights/county_Y.csv"));
+
+for r in zip(names(df_y), permutedims(df_y)[:,1])
+    println(r);
+end
