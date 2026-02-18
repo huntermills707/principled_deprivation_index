@@ -4,8 +4,8 @@ using DataStructures: OrderedDict
 using HTTP
 using JSON3
 
-include("census_vars.jl");
-include("secrets.jl");
+include("helpers/census_vars.jl");
+include("helpers/secrets.jl");
 
 ENV["census_key"] = census_key;
 
