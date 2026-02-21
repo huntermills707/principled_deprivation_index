@@ -58,3 +58,9 @@ println(pvals)
 for (condition, name) in conditions
     plot_tract(df, condition, name)
 end
+
+df_y = DataFrame(CSV.File("weights/tract_Y.csv"));
+
+for r in zip(names(df_y), permutedims(df_y)[:,1])
+    println(r);
+end

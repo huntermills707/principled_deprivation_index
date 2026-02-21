@@ -50,3 +50,9 @@ println(pvals)
 for (condition, name) in conditions
     plot_zip(df, condition, name)
 end
+
+df_y = DataFrame(CSV.File("weights/zcta_Y.csv"));
+
+for r in zip(names(df_y), permutedims(df_y)[:,1])
+    println(r);
+end
