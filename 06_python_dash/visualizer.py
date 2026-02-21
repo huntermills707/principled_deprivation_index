@@ -1,3 +1,5 @@
+from json import load
+
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
@@ -6,20 +8,15 @@ import pandas as pd
 import numpy as np
 import requests
 
-# Fetch USA counties GeoJSON
-geojson_url = "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
-counties = requests.get(geojson_url).json()
+counties = None
+with open('geojson-counties-fips-post-2024.json') as fp:
+    counties = load(fp)
+
+for feature in counties['features']:
+    feature['id'] = feature['properties']['STATE'] + feature['properties']['COUNTY']
 
 # Extract all FIPS codes from the GeoJSON
 fips_codes = [feature['id'] for feature in counties['features']]
-
-print(counties.keys())
-
-for feature in counties['features']:
-    if not feature['id'].startswith('46113'):
-        continue
-    feature['id'] = '46102'
-    print
 
 # Create DataFrame with FIPS codes and two random numbers per county
 df = pd.read_csv('../final/county_results.csv')
@@ -308,4 +305,4 @@ def update_maps(selected_state, selected_index, selected_outcome, relayout1, rel
     return fig1, fig2, new_viewport
 
 if __name__ == '__main__':
-    app.run(debug=True, threaded=True, port=8051)
+    app.run(debug=False, threaded=True, port=8050)
