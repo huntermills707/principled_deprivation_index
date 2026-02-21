@@ -22,6 +22,14 @@ fips_codes = [feature['id'] for feature in counties['features']]
 df = pd.read_csv('../final/county_results.csv')
 df['COUNTY'] = df['COUNTY'].astype(str).str.zfill(5)
 
+locations = pd.DataFrame(
+    [[feature['id'], feature['properties']['NAME']] 
+     for feature in counties['features']],
+    columns=['COUNTY', 'NAME']
+)
+
+df = df.merge(locations, on='COUNTY')
+
 conditions = [
     ("mhlth_crudeprev", "Poor mental health"),
     ("cognition_crudeprev", "Cognitive disability"),
@@ -270,7 +278,7 @@ def update_maps(selected_state, selected_index, selected_outcome, relayout1, rel
         geojson=counties_filtered,
         locations='COUNTY',
         color=selected_index,
-        hover_data ={selected_index: ':.3f', selected_outcome: ":.2f"},
+        hover_data ={'NAME': True, selected_index: ':.3f', selected_outcome: ":.2f"},
         color_continuous_scale="Plasma",
         zoom=new_viewport['zoom'],
         center=new_viewport['center'],
@@ -289,7 +297,7 @@ def update_maps(selected_state, selected_index, selected_outcome, relayout1, rel
         geojson=counties_filtered,
         locations='COUNTY',
         color=selected_outcome,
-        hover_data ={selected_index: ':.3f', selected_outcome: ":.2f"},
+        hover_data ={'NAME': True, selected_index: ':.3f', selected_outcome: ":.2f"},
         color_continuous_scale="Plasma",
         zoom=new_viewport['zoom'],
         center=new_viewport['center'],
