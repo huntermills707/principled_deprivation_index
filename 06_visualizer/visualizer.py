@@ -19,7 +19,7 @@ for feature in counties['features']:
 fips_codes = [feature['id'] for feature in counties['features']]
 
 # Create DataFrame with FIPS codes and two random numbers per county
-df = pd.read_csv('../final/county_results.csv')
+df = pd.read_csv('county_results.csv')
 df['COUNTY'] = df['COUNTY'].astype(str).str.zfill(5)
 
 locations = pd.DataFrame(
@@ -153,6 +153,7 @@ state_names = ['All USA'] + sorted([state_fips_to_name[fips] for fips in valid_s
 
 # Initialize Dash app
 app = dash.Dash(__name__)
+server = app.server
 
 app.layout = html.Div([
     html.H1("Index:Condition Synced County Choropleth Maps", style={'textAlign': 'center'}),

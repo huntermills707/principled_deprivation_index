@@ -64,6 +64,8 @@ function query_census(surv, var; agg="county", state="")
         url;
         query = query
     )
+
+    println(r.request.url)
  
     body = JSON3.read(r.body)
     header, data = body[1], body[2:end]

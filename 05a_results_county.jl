@@ -55,9 +55,7 @@ for (condition, name) in conditions
     plot_county(df, condition, name)
 end
 
-mkpath("final")
-
-CSV.write("final/county_results.csv", df);
+CSV.write("06_visualizer/county_results.csv", df);
 
 df_y = DataFrame(CSV.File("weights/county_Y.csv"));
 
