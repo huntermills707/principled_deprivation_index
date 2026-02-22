@@ -163,7 +163,7 @@ app.layout = html.Div([
         dcc.Dropdown(
             id='state-dropdown',
             options=[{'label': state, 'value': state} for state in state_names],
-            value='All USA',
+            value='California',
             style={'width': '100%'}
         )
     ], style={'width': '50%', 'margin': '0 auto', 'padding': '10px'}),
