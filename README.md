@@ -51,6 +51,10 @@ These scripts ingest and clean specific open data sources to generate feature se
 *   **`05a_results_county.jl`**: Validates the County-level index against CDC Places data and compares it to SVI, NDI, and NRI.
 *   **`05b_results_zcta.jl`** & **`05c_results_tract.jl`**: Performs similar validation at the ZCTA and Tract levels.
 
+### 6. Visualizer
+* Contains submodule to visualize the county level results using Plotly/Dash. see [repo](https://github.com/huntermills707/pdi-visualizer) for more info.
+* Visualizer available [here](https://pdi-visualizer.onrender.com). Currently deployed under Render's free Hobby Tier, may take a few moments to warm up.
+
 ## Methodology
 
 We define a GLRM with constraints to ensure a principled, interpretable index.
