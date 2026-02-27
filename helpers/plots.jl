@@ -60,23 +60,26 @@ function plot_county(df, col, name)
      * NDI
      * SVI
      * NRI
+     * ReADI
     """
     mkpath("plots/county")
+
 
     i1_xy, i1_x, y = kde_subplots(df, :PDI, col, name)
     i2_xy, i2_x, _ = kde_subplots(df, :NDI, col, name)
     i3_xy, i3_x, _ = kde_subplots(df, :SVI, col, name)
     i4_xy, i4_x, _ = kde_subplots(df, :NRI, col, name)
+    i5_xy, i5_x, _ = kde_subplots(df, :ReADI, col, name)
 
     l = @layout [
-        i1_x              i2_x               _; 
-        i1_xy{0.45w,0.4h} i2_xy{0.45w,0.4h}  y; 
-        i3_x              i4_x               _; 
-        i3_xy{0.45w,0.4h} i4_xy{0.45w,0.4h}  y
+      [i1_x               i2_x               i3_x              _;
+       i1_xy{0.32w,0.9h}  i2_xy{0.32w,0.9h}  i3_xy{0.32w,0.9h} y]
+      [_    i4_x              i5_x              _              _;
+       _    i4_xy{0.32w,0.9h} i5_xy{0.32w,0.9h} y{0.04w,0.9h}  _]
     ]
 
-    p = plot(i1_x, i2_x, i1_xy, i2_xy, y, i3_x, i4_x, i3_xy, i4_xy, y, 
-             layout = l, 
+    p = plot(i1_x, i2_x, i3_x , i1_xy, i2_xy, i3_xy, y, i4_x, i5_x, i4_xy, i5_xy, y, 
+             layout = l,
              size=(800,600))
     savefig(p, """plots/county/$(col).png""")
 end
@@ -115,6 +118,7 @@ function plot_tract(df, col, name)
      * SVI
      * NRI
      * nSES
+     * ReADI
     """
     mkpath("plots/tract")
 
@@ -123,15 +127,16 @@ function plot_tract(df, col, name)
     i3_xy, i3_x, _ = kde_subplots(df, :SVI, col, name)
     i4_xy, i4_x, _ = kde_subplots(df, :NRI, col, name)
     i5_xy, i5_x, _ = kde_subplots(df, :nSES, col, name)
+    i6_xy, i6_x, _ = kde_subplots(df, :ReADI, col, name)
 
     l = @layout [
       [i1_x               i2_x               i3_x              _;
        i1_xy{0.32w,0.9h}  i2_xy{0.32w,0.9h}  i3_xy{0.32w,0.9h} y]
-      [_    i4_x              i5_x              _              _;
-       _    i4_xy{0.32w,0.9h} i5_xy{0.32w,0.9h} y{0.04w,0.9h}  _]
+      [i4_x               i5_x               i6_x              _;
+       i4_xy{0.32w,0.9h}  i5_xy{0.32w,0.9h}  i6_xy{0.32w,0.9h} y]
     ]
 
-    p = plot(i1_x, i2_x, i3_x , i1_xy, i2_xy, i3_xy, y, i4_x, i5_x, i4_xy, i5_xy, y, 
+    p = plot(i1_x, i2_x, i3_x , i1_xy, i2_xy, i3_xy, y, i4_x, i5_x, i6_x, i4_xy, i5_xy, i6_xy, y, 
              layout = l, 
              size=(800,600))
     savefig(p, """plots/tract/$(col).png""")

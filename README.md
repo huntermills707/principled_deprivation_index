@@ -1,7 +1,7 @@
 
 # Principled Deprivation Index
 
-A Julia-based pipeline for calculating a Principled Deprivation Index (PDI) using Generalized Low Rank Models (GLRM). The project aims to create an interpretable social index that natively handles missing data and reduces the influence of outliers, validated against public health outcomes.
+A Julia-based pipeline for calculating Principled Deprivation Index (PDI) using Generalized Low Rank Models (GLRM). The project aims to create an interpretable social index that natively handles missing data and reduces the influence of outliers, validated against public health outcomes.
 
 ## Overview
 
@@ -103,9 +103,12 @@ The model is trained using the following open data sources:
 
 **Comparison Indices**:
 *   Social Vulnerability Index (SVI)
+*   Reproducible Area Deprivation Index (ReADI)
 *   Neighborhood Deprivation Index (NDI)
 *   National Risk Index (NRI)
 *   Neighborhood Socioeconomic Status (nSES)
+
+SVI, NDI, NRI, and nSES pulled via UCSF Health Atlas. ReADI pulled from Stanford Socioeconomic Position Indices. 
 
 ## Results
 
@@ -115,29 +118,29 @@ The generated Principled Deprivation Index (PDI) is compared against existing in
 
 Here are the correlations between CDC Places population health estimates at the county level compared against county level indices:
 
-Condition | PDI | NDI | SVI | NRI |
-| :--- | :--- | :--- | :--- | :--- |
-| Poor mental health | 0.581173 | 0.676638 | 0.572708 | 0.053637 |
-| Cognitive disability | 0.700403 | 0.744145 | 0.649323 | -0.0363669 |
-| Disability | 0.637453 | 0.431144 | 0.359293 | -0.214052 |
-| Mobility disability | 0.788381 | 0.61525 | 0.541301 | -0.206172 |
-| Self-care disability | 0.790203 | 0.776616 | 0.669724 | -0.132481 |
-| Independent living disability | 0.800828 | 0.776939 | 0.663769 | -0.12941 |
-| Hearing disability | 0.483669 | 0.17211 | 0.157582 | -0.435887 |
-| Vision disability | 0.743171 | 0.80615 | 0.727624 | -0.0618675 |
-| Poor physical health | 0.763653 | 0.640839 | 0.55533 | -0.210143 |
-| Poor self-rated health | 0.790306 | 0.748529 | 0.661219 | -0.117571 |
-| Diabetes | 0.76661 | 0.612323 | 0.536549 | -0.173646 |
-| Stroke | 0.742518 | 0.548049 | 0.466485 | -0.278155 |
-| High blood pressure | 0.71751 | 0.447176 | 0.366137 | -0.251371 |
-| Chronic obstructive pulmonary disease | 0.691483 | 0.427013 | 0.323836 | -0.306082 |
-| Arthritis | 0.507251 | 0.118534 | 0.0307473 | -0.362742 |
-| Obesity | 0.650715 | 0.484567 | 0.334818 | -0.155034 |
-| All teeth lost | 0.718803 | 0.701762 | 0.572987 | -0.120109 |
-| High cholesterol | 0.47473 | 0.115454 | 0.118794 | -0.287099 |
-| Asthma | 0.444139 | 0.465921 | 0.326093 | -0.111794 |
-| Cancer (non-skin) or melanoma | -0.0858599 | -0.50805 | -0.462637 | -0.387521 |
-| Coronary heart disease | 0.59241 | 0.23196 | 0.197912 | -0.40104 |
+Condition | PDI | ReADI | NDI | SVI | NRI |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+|Poor mental health|0.581173|0.575269|0.676638|0.572708|0.053637|
+|Cognitive disability|0.700403|0.750691|0.744145|0.649323|-0.0363669|
+|Disability|0.637453|0.643126|0.431144|0.359293|-0.214052|
+|Mobility disability|0.788381|0.838879|0.61525|0.541301|-0.206172|
+|Self-care disability|0.790203|0.843949|0.776616|0.669724|-0.132481|
+|Independent living disability|0.800828|0.852947|0.776939|0.663769|-0.12941|
+|Hearing disability|0.483669|0.655724|0.17211|0.157582|-0.435887|
+|Vision disability|0.743171|0.788533|0.80615|0.727624|-0.0618675|
+|Poor physical health|0.763653|0.818158|0.640839|0.55533|-0.210143|
+|Poor self-rated health|0.790306|0.827961|0.748529|0.661219|-0.117571|
+|Diabetes|0.76661|0.772503|0.612323|0.536549|-0.173646|
+|Stroke|0.742518|0.805994|0.548049|0.466485|-0.278155|
+|High blood pressure|0.71751|0.73546|0.447176|0.366137|-0.251371|
+|Chronic obstructive pulmonary d…|0.691483|0.751826|0.427013|0.323836|-0.306082|
+|Arthritis|0.507251|0.551912|0.118534|0.0307473|-0.362742|
+|Obesity|0.650715|0.671332|0.484567|0.334818|-0.155034|
+|All teeth lost|0.718803|0.762774|0.701762|0.572987|-0.120109|
+|High cholesterol|0.47473|0.48836|0.115454|0.118794|-0.287099|
+|Asthma|0.444139|0.44271|0.465921|0.326093|-0.111794|
+|Cancer (non-skin) or melanoma|-0.0858599|0.00334487|-0.50805|-0.462637|-0.387521|
+|Coronary heart disease|0.59241|0.699824|0.23196|0.197912|-0.40104|
 
 ### ZCTA
 
@@ -171,29 +174,29 @@ Condition | PDI | NDI |
 
 Here are the correlations between CDC Places population health estimates at the tract level compared against tract level indices:
 
-Condition | PDI | NDI | SVI | NRI | nSES |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| Poor mental health | 0.617391 | 0.756312 | 0.611679 | 0.0526768 | 0.721862 |
-| Cognitive disability | 0.702095 | 0.827733 | 0.707837 | 0.128541 | 0.792472 |
-| Disability | 0.544312 | 0.499616 | 0.381473 | 0.0452995 | 0.496748 |
-| Mobility disability | 0.756119 | 0.757189 | 0.626418 | 0.123755 | 0.716391 |
-| Self-care disability | 0.734778 | 0.786704 | 0.704046 | 0.103686 | 0.761842 |
-| Independent living disability | 0.766361 | 0.832248 | 0.725802 | 0.0919571 | 0.810972 |
-| Hearing disability | 0.473216 | 0.450109 | 0.273731 | 0.137822 | 0.440102 |
-| Vision disability | 0.719596 | 0.783042 | 0.758535 | 0.138183 | 0.76813 |
-| Poor physical health | 0.771566 | 0.826383 | 0.681032 | 0.137639 | 0.800541 |
-| Poor self-rated health | 0.771259 | 0.834159 | 0.75399 | 0.150808 | 0.801609 |
-| Diabetes | 0.693826 | 0.684211 | 0.579362 | 0.140436 | 0.625801 |
-| Stroke | 0.688796 | 0.664193 | 0.523901 | 0.0919557 | 0.638529 |
-| High blood pressure | 0.586178 | 0.522268 | 0.313248 | 0.0518131 | 0.441673 |
-| Chronic obstructive pulmonary disease | 0.659803 | 0.65797 | 0.405772 | 0.0503004 | 0.606046 |
-| Arthritis | 0.388372 | 0.321127 | 0.035744 | -0.0257132 | 0.26116 |
-| Obesity | 0.677252 | 0.752842 | 0.468255 | 0.00992877 | 0.646724 |
-| All teeth lost | 0.721536 | 0.790117 | 0.667015 | 0.049354 | 0.757987 |
-| High cholesterol | 0.242123 | 0.152609 | 0.0301885 | 0.0985966 | 0.112359 |
-| Asthma | 0.585764 | 0.652264 | 0.435436 | -0.149716 | 0.633907 |
-| Cancer (non-skin) or melanoma | -0.168344 | -0.284778 | -0.417213 | -0.00903761 | -0.271392 |
-| Coronary heart disease | 0.504145 | 0.448662 | 0.255676 | 0.0915533 | 0.420965 |
+Condition | PDI | ReADI | NDI | SVI | NRI | nSES |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+|Poor mental health 0.617391|0.617391|0.788314|0.756312|0.611679|0.0526768|0.721862|
+|Cognitive disability 0.702095|0.702095|0.874496|0.827733|0.707837|0.128541|0.792472|
+|Disability 0.544312|0.544312|0.540549|0.499616|0.381473|0.0452995|0.496748|
+|Mobility disability 0.756119|0.756119|0.8108|0.757189|0.626418|0.123755|0.716391|
+|Self-care disability 0.734778|0.734778|0.84771|0.786704|0.704046|0.103686|0.761842|
+|Independent living disability 0.766361|0.766361|0.903257|0.832248|0.725802|0.0919571|0.810972|
+|Hearing disability 0.473216|0.473216|0.509448|0.450109|0.273731|0.137822|0.440102|
+|Vision disability 0.719596|0.719596|0.843735|0.783042|0.758535|0.138183|0.76813|
+|Poor physical health 0.771566|0.771566|0.868148|0.826383|0.681032|0.137639|0.800541|
+|Poor self-rated health 0.771259|0.771259|0.884231|0.834159|0.75399|0.150808|0.801609|
+|Diabetes 0.693826|0.693826|0.714797|0.684211|0.579362|0.140436|0.625801|
+|Stroke 0.688796|0.688796|0.718145|0.664193|0.523901|0.0919557|0.638529|
+|High blood pressure 0.586178|0.586178|0.552237|0.522268|0.313248|0.0518131|0.441673|
+|Chronic obstructive pulmonary d… 0.659803|0.659803|0.704423|0.65797|0.405772|0.0503004|0.606046|
+|Arthritis 0.388372|0.388372|0.331666|0.321127|0.035744|-0.0257132|0.26116|
+|Obesity 0.677252|0.677252|0.750497|0.752842|0.468255|0.00992877|0.646724|
+|All teeth lost 0.721536|0.721536|0.858248|0.790117|0.667015|0.049354|0.757987|
+|High cholesterol 0.242123|0.242123|0.134366|0.152609|0.0301885|0.0985966|0.112359|
+|Asthma 0.585764|0.585764|0.66447|0.652264|0.435436|-0.149716|0.633907|
+|Cancer (non-skin) or melanoma -0.168344|-0.168344|-0.269953|-0.284778|-0.417213|-0.00903761|-0.271392|
+|Coronary heart disease 0.504145|0.504145|0.493569|0.448662|0.255676|0.0915533|0.420965|
 
 ### Loadings
 

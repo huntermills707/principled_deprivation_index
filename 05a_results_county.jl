@@ -8,6 +8,8 @@ df_x = DataFrame(CSV.File("weights/county_X.csv"))[:, ["COUNTY", "1"]]
 rename!(df_x, [("1" => :x)]);
 
 df_ha = DataFrame(CSV.File("raw_data/ucsf_health_atlas/health-atlas-2026-01-27-county.csv"))
+df_adi = DataFrame(CSV.File("raw_data/stanford_readi/ReADI_C_2022.csv"))[:, [:GEOID, :ReADI_C_Raw]]
+df_ha = leftjoin(df_ha, df_adi, on=:GEOID)
 
 rename!(df_ha, [(:GEOID => :COUNTY)]);
 
@@ -15,6 +17,7 @@ df = leftjoin(df_ha, df_x, on=:COUNTY);
 
 new_names = [
     :x => :PDI
+    :ReADI_C_Raw => :ReADI
     :ndi => :NDI
     :RPL_THEMES => :SVI
     :risk_score => :NRI
@@ -24,6 +27,7 @@ rename!(df, new_names...)
 
 indices = [
     :PDI,
+    :ReADI,
     :NDI,
     :SVI,
     :NRI,

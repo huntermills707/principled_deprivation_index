@@ -29,7 +29,9 @@ indices = [
     (:ndi, "Neighborhood Deprivation Index"),
     (:RPL_THEMES, "Social Vulnerability Index"),
     (:risk_score, "National Risk Index Score"),
-    (:nses_index, "Neighborhood Socioeconomic Status Index")
+    (:nses_index, "Neighborhood Socioeconomic Status Index"),
+    (:ReADI_C_Raw, "Reproducible Area Deprivation Index"),
+    (:ReADI_CT_Raw, "Reproducible Area Deprivation Index")
 ]
 
 function compare(df, col)
