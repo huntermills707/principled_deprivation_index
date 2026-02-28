@@ -61,13 +61,15 @@ These scripts ingest and clean specific open data sources to generate feature se
 
 ### 5. Validation & Results
 *   **`05a_results_county.jl`**: Validates the County-level index against CDC Places data and compares it to SVI, NDI, and NRI.
-    *    Requires (https://healthatlas.ucsf.edu)
+    *    Requires data from https://healthatlas.ucsf.edu
     *    Select Export Map Data: Counties, Socioeconomic Indices (Characteristics Select All), Health and Health Care (Characteristics Select All)
     *    Set to raw_data/ucsf_health_atlas/health-atlas-county.csv
 *   **`05b_results_zcta.jl`**: Performs similar validation at the ZCTA level
+    *    Requires data from https://healthatlas.ucsf.edu
     *    Select Export Map Data: ZCTA, Socioeconomic Indices (Characteristics Select All), Health and Health Care (Characteristics Select All)
     *    Set to raw_data/ucsf_health_atlas/health-atlas-zip.csv
 *   **`05c_results_tract.jl`**: Performs similar validation at the Tract level.
+    *    Requires data from https://healthatlas.ucsf.edu
     *    Select Export Map Data: Census Tracts, Socioeconomic Indices (Characteristics Select All), Health and Health Care (Characteristics Select All)
     *    Set to raw_data/ucsf_health_atlas/health-atlas-tract.csv
 ### 6. Visualizer
