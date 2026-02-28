@@ -23,15 +23,16 @@ Pkg.instantiate()       # Install dependencies listed in Project.toml
 
 ### Dependencies
 
-Key packages used include `CSV`, `DataFrames`, `Convex`, `SCS` (for optimization), `Plots`, and `Impute`. See `Project.toml` for the full list.
+Key packages used include `CSV`, `DataFrames`, `Convex`, `SCS` (for optimization), and `Plots`. See `Project.toml` for the full list.
 
 ## Project Workflow
 
-The pipeline is numbered sequentially (01–05) to guide the user from data ingestion to validation.
+The pipeline is numbered sequentially (01–06) to guide the user from data ingestion to validation and visualization.
 
 ### 1. Geography & Census Data
 *   **`01a_geography.jl`**: Loads and merges geographical crosswalks (HUD, Census) to map Tracts, ZCTAs (ZIP codes), and Counties.
 *   **`01b_census_pull.jl`**: Pulls raw US Census variables using the API (defined in `census_vars.jl`).
+    *   **helpers/secrets.jl**: Holds US Census API key (Must be set).
 
 ### 2. Feature Engineering
 These scripts ingest and clean specific open data sources to generate feature sets for the model.
