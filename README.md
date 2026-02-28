@@ -30,15 +30,26 @@ Key packages used include `CSV`, `DataFrames`, `Convex`, `SCS` (for optimization
 The pipeline is numbered sequentially (01–06) to guide the user from data ingestion to validation and visualization.
 
 ### 1. Geography & Census Data
-*   **`01a_geography.jl`**: Loads and merges geographical crosswalks (HUD, Census) to map Tracts, ZCTAs (ZIP codes), and Counties.
+*   **`01a_geography.jl`**: Loads and merges geographical crosswalks (HUD, Census) to map Tracts, ZCTAs (ZIP codes), and Counties. Requires the following files:
+    *    raw_data/state_fips.csv (https://gist.github.com/aodin/24c30ba793e404a0270f8c8ef2be350b)
+    *    raw_data/census/national_county2020.txt (https://www2.census.gov/geo/docs/reference/codes2020/national_county2020.txt)
+    *    raw_data/hud/TRACT_ZIP_032023.xlsx (https://www.huduser.gov/portal/datasets/usps_crosswalk.html)
+    *    raw_data/hug/ZIP_COUNTY_032023.xlsx (https://www.huduser.gov/portal/datasets/usps_crosswalk.html)
 *   **`01b_census_pull.jl`**: Pulls raw US Census variables using the API (defined in `census_vars.jl`).
     *   **helpers/secrets.jl**: Holds US Census API key (Must be set).
 
 ### 2. Feature Engineering
 These scripts ingest and clean specific open data sources to generate feature sets for the model.
 *   **`02a_fbi_cde.jl`**: Processes FBI Crime Data Explorer (NIBRS) to calculate crime rates by agency, aggregating up to County/ZCTA/Tract levels.
-*   **`02b_fema_eal.jl`**: ingests FEMA Expected Annual Loss data for natural disaster risk.
-*   **`02c_usda_food_insecure.jl`**: Processes USDA Food Access Research Atlas data.
+    *    Requires State Tables, by Agency 2023 (https://cde.ucr.cjis.gov/LATEST/webapp/#nibrs-downloads)
+    *    Extract to raw_data/fbi_cde/stateTables_2023
+*   **`02b_fema_eal.jl`**: ingests FEMA Expected Annual Loss data for natural disaster risk. Requires the following file: 
+    *    From https://www.fema.gov/about/openfema/data-sets/national-risk-index-data:
+    *    Download All County Tables (extracted to raw_data/fema_eal/NRI_Table_Counties/NRI_Table_Counties.csv)
+    *    Download All Census tracts Tables (extracted to raw_data/fema_eal/NRI_Table_CensusTracts/NRI_Table_CensusTracts.csv)
+*   **`02c_usda_food_insecure.jl`**: Processes USDA Food Access Research Atlas data. Requires the following file:
+    *    raw_data/usda/2019 Food Access Research Atlas Data/Food Access Research Atlas.csv (https://www.ers.usda.gov/data-products/food-access-research-atlas/download-the-data)
+
 *   **`02d_census_wrangle.jl`**: Cleans and synthesizes features from the raw Census pull.
 
 ### 3. Data Merging & Standardization
@@ -50,8 +61,15 @@ These scripts ingest and clean specific open data sources to generate feature se
 
 ### 5. Validation & Results
 *   **`05a_results_county.jl`**: Validates the County-level index against CDC Places data and compares it to SVI, NDI, and NRI.
-*   **`05b_results_zcta.jl`** & **`05c_results_tract.jl`**: Performs similar validation at the ZCTA and Tract levels.
-
+    *    Requires (https://healthatlas.ucsf.edu)
+    *    Select Export Map Data: Counties, Socioeconomic Indices (Characteristics Select All), Health and Health Care (Characteristics Select All)
+    *    Set to raw_data/ucsf_health_atlas/health-atlas-county.csv
+*   **`05b_results_zcta.jl`**: Performs similar validation at the ZCTA level
+    *    Select Export Map Data: ZCTA, Socioeconomic Indices (Characteristics Select All), Health and Health Care (Characteristics Select All)
+    *    Set to raw_data/ucsf_health_atlas/health-atlas-zip.csv
+*   **`05c_results_tract.jl`**: Performs similar validation at the Tract level.
+    *    Select Export Map Data: Census Tracts, Socioeconomic Indices (Characteristics Select All), Health and Health Care (Characteristics Select All)
+    *    Set to raw_data/ucsf_health_atlas/health-atlas-tract.csv
 ### 6. Visualizer
 * Contains submodule to visualize the county level results using Plotly/Dash. see [repo](https://github.com/huntermills707/pdi-visualizer) for more info.
 * Visualizer available [here](https://pdi-visualizer.onrender.com). Currently deployed under Render's free Hobby Tier, may take a few moments to warm up.

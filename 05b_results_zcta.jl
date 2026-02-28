@@ -7,7 +7,7 @@ include("helpers/plots.jl")
 df_x = DataFrame(CSV.File("weights/zcta_X.csv"))[:, ["ZIP", "1"]]
 rename!(df_x, [("1" => :x)]);
 
-df_ha = DataFrame(CSV.File("raw_data/ucsf_health_atlas/health-atlas-2026-01-27-zip.csv"))
+df_ha = DataFrame(CSV.File("raw_data/ucsf_health_atlas/health-atlas-zip.csv"))
 
 rename!(df_ha, [(:GEOID => :ZIP)]);
 
